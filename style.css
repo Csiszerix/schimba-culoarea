@@ -1,0 +1,212 @@
+/* /C:/Users/csisz/Documents/nextlab/schimba-culoarea/style.css */
+
+/* Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+:root{
+    /* Warm pastel palette */
+    --bg-start: #ffd6a5;
+    --bg-end:   #ffcad4;
+    --accent-lav: #e9d5ff;
+    --container-bg: #fffaf4; /* cream */
+    --text: #343434;
+    --muted: #8f9599;
+    --peach: #ffb4a2;
+    --peach-dark: #ff9b86;
+    --pink: #ffd1e0;
+    --pink-dark: #ffb0c4;
+    --lavender: #d9c7ff;
+    --lavender-dark: #c1aaff;
+    --completed-bg: #f3f4f6;
+    --shadow: 0 10px 30px rgba(38, 30, 22, 0.08);
+    --card-shadow: 0 6px 18px rgba(38, 30, 22, 0.06);
+}
+
+/* Page background and base font */
+html,body{
+    height:100%;
+}
+body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:36px;
+    background: linear-gradient(135deg, var(--bg-start) 10%, var(--bg-end) 60%, var(--accent-lav) 100%);
+    font-family: "Poppins", "Segoe UI", sans-serif;
+    color:var(--text);
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+}
+
+/* Main container */
+.app-container{
+    width:100%;
+    max-width:820px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.98), var(--container-bg));
+    border-radius:20px;
+    padding:28px;
+    box-shadow: var(--shadow);
+    overflow:hidden;
+    transform: translateZ(0);
+}
+
+/* Header */
+.todo-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    margin-bottom:16px;
+}
+.todo-title{
+    margin:0;
+    font-size:1.6rem;
+    font-weight:600;
+    letter-spacing:0.2px;
+}
+.todo-sub{
+    font-size:0.9rem;
+    color:var(--muted);
+}
+
+/* Input area */
+.todo-input-row{
+    display:flex;
+    gap:12px;
+    align-items:center;
+    margin-top:8px;
+}
+.input{
+    flex:1;
+    display:flex;
+    gap:8px;
+    align-items:center;
+    background:rgba(255,255,255,0.7);
+    padding:10px 12px;
+    border-radius:12px;
+    box-shadow: var(--card-shadow);
+    border:1px solid rgba(0,0,0,0.03);
+}
+.input input[type="text"]{
+    border:0;
+    outline:0;
+    background:transparent;
+    font-size:0.97rem;
+    color:var(--text);
+    width:100%;
+    padding:6px 4px;
+}
+.input input::placeholder{ color:var(--muted); }
+
+/* Small rounded buttons */
+.btn{
+    border:0;
+    padding:7px 10px;
+    border-radius:999px;
+    font-size:0.9rem;
+    cursor:pointer;
+    transition: transform .12s ease, filter .12s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+}
+.btn:active{ transform:translateY(1px); }
+.btn:focus{ outline:2px solid rgba(0,0,0,0.06); outline-offset:2px; }
+
+/* Color variants */
+.btn--peach{ background:var(--peach); color:#fff; }
+.btn--peach:hover{ background:var(--peach-dark); }
+.btn--pink{ background:var(--pink); color:#8b3b4d; }
+.btn--pink:hover{ background:var(--pink-dark); }
+.btn--lavender{ background:var(--lavender); color:#3f2b66; }
+.btn--lavender:hover{ background:var(--lavender-dark); }
+
+/* Todo list */
+.todo-list{
+    margin-top:18px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+/* Individual task */
+.todo-item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:12px;
+    border-radius:12px;
+    background:rgba(255,255,255,0.9);
+    box-shadow: var(--card-shadow);
+    transition: transform .14s ease, box-shadow .14s ease, background .14s ease;
+}
+.todo-item:hover{
+    transform: translateY(-4px);
+    box-shadow: 0 14px 30px rgba(38,30,22,0.08);
+}
+
+/* Checkbox visual (works well with input[type=checkbox] hidden) */
+.check{
+    width:20px;
+    height:20px;
+    min-width:20px;
+    border-radius:6px;
+    border:2px solid rgba(0,0,0,0.06);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(180deg,#fff,#fff0);
+    cursor:pointer;
+    transition: background .12s ease, border-color .12s ease, transform .12s ease;
+}
+.check.checked{
+    background:linear-gradient(180deg, var(--peach), var(--pink));
+    border-color:transparent;
+    transform:scale(0.98);
+}
+
+/* Task content */
+.task-text{
+    flex:1;
+    font-size:0.98rem;
+    line-height:1.2;
+    color:var(--text);
+}
+
+/* Small meta / actions */
+.item-actions{
+    display:flex;
+    gap:8px;
+    align-items:center;
+}
+
+/* Completed task styling */
+.todo-item.completed{
+    background:var(--completed-bg);
+}
+.todo-item.completed .task-text{
+    color:var(--muted);
+    text-decoration: line-through;
+    opacity:0.95;
+}
+
+/* Spacing and rounded tiny chips for labels/dates */
+.chip{
+    background:rgba(0,0,0,0.03);
+    padding:6px 8px;
+    border-radius:999px;
+    font-size:0.8rem;
+    color:var(--muted);
+}
+
+/* Responsive and airy layout */
+@media (max-width:680px){
+    .app-container{ padding:18px; border-radius:16px; }
+    .todo-title{ font-size:1.2rem; }
+    .input input[type="text"]{ font-size:0.95rem; }
+    .btn{ padding:6px 9px; font-size:0.85rem; }
+    .todo-item{ padding:10px; gap:10px; border-radius:10px; }
+}
+
+/* Small accessibility improvements */
+button, .check{ -webkit-tap-highlight-color: transparent; }

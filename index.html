@@ -1,33 +1,355 @@
-<!-- O pagină web care schimbă culoarea de fundal când apeși un buton -->
-<!DOCTYPE html>
-<html lang="ro">    
+<!doctype html>
+<html lang="ro">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Schimbare Culoare Fundal</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>🌸 Lista mea de sarcini</title>
+    <link rel="stylesheet" href="style.css" />
     <style>
-        body {
-            transition: background-color 0.5s;
+        :root{
+            --bg:#FFF7F2; /* crem pal */
+            --card:#FFEFE6; /* piersică pal */
+            --accent:#FFD4CC; /* roz piersică */
+            --muted:#9A9A9A;
+            --done:#BDBDBD;
+            --btn:#FFB3A1;
+            --glass: rgba(255,255,255,0.6);
+            --shadow: 0 8px 24px rgba(34,34,34,0.08);
+            --radius:16px;
+            --gap:12px;
+            font-family: "Poppins", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial;
         }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
+
+        html,body{height:100%;}
+        body{
+            margin:0;
+            background: linear-gradient(180deg, #FFF9F6 0%, #FFF3EE 100%);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            min-height:100vh;
+            -webkit-font-smoothing:antialiased;
+            -moz-osx-font-smoothing:grayscale;
+        }
+
+        .app{
+            width: min(540px, 92vw);
+            background: linear-gradient(180deg, var(--card), var(--accent));
+            border-radius: var(--radius);
+            padding: 28px;
+            box-shadow: var(--shadow);
+            display:flex;
+            flex-direction:column;
+            gap:16px;
+            align-items:stretch;
+            backdrop-filter: blur(6px);
+        }
+
+        .title{
+            display:flex;
+            align-items:center;
+            gap:12px;
+        }
+        .title h1{
+            margin:0;
+            font-size:20px;
+            color:#5A2F2A;
+            letter-spacing:0.2px;
+            font-weight:600;
+        }
+        .subtitle{
+            margin:0;
+            font-size:13px;
+            color:#6f4b46;
+            opacity:0.9;
+        }
+
+        form.input-row{
+            display:flex;
+            gap:10px;
+            align-items:center;
+            margin-top:4px;
+        }
+
+        .input-wrap{
+            flex:1;
+            display:flex;
+            align-items:center;
+            background:var(--glass);
+            padding:6px;
+            border-radius:999px;
+            border: 1px solid rgba(255,255,255,0.6);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+        }
+
+        input[type="text"]{
+            border:0;
+            outline:0;
+            background:transparent;
+            padding:10px 12px;
+            font-size:15px;
+            flex:1;
+            color:#4a2a26;
+        }
+
+        button.add-btn{
+            width:44px;
+            height:44px;
+            border-radius:50%;
+            border:0;
+            background:linear-gradient(180deg,#FF7F66,#FFB3A1);
+            color:white;
+            font-size:22px;
+            cursor:pointer;
+            display:inline-grid;
+            place-items:center;
+            box-shadow: 0 6px 18px rgba(255,127,102,0.28);
+            transition: transform .12s ease, box-shadow .12s ease;
+        }
+        button.add-btn:active{ transform:scale(.96); box-shadow: 0 4px 12px rgba(255,127,102,0.22); }
+
+        ul.todo-list{
+            list-style:none;
+            padding:0;
+            margin:0;
+            display:flex;
+            flex-direction:column;
+            gap:10px;
+        }
+
+        li.task{
+            background: linear-gradient(180deg, rgba(255,255,255,0.45), rgba(255,255,255,0.2));
+            padding:10px 12px;
+            border-radius:12px;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:10px;
+            box-shadow: 0 4px 12px rgba(36,36,36,0.06);
+            transform-origin: center;
+            animation: fadeInUp .28s ease both;
+        }
+
+        .task-left{
+            display:flex;
+            align-items:center;
+            gap:10px;
+            flex:1 1 auto;
+            min-width:0;
+        }
+
+        .text{
+            font-size:15px;
+            color:#472C29;
+            word-break:break-word;
+            white-space:pre-wrap;
+        }
+
+        .text.done{
+            color:var(--done);
+            text-decoration:line-through;
+            opacity:0.85;
+        }
+
+        .controls{
+            display:flex;
+            gap:8px;
+            align-items:center;
+        }
+
+        .icon-btn{
+            border:0;
+            background:transparent;
+            cursor:pointer;
+            font-size:16px;
+            width:36px;
+            height:36px;
+            border-radius:10px;
+            display:inline-grid;
+            place-items:center;
+            transition: background .12s ease, transform .08s ease;
+        }
+        .icon-btn:hover{ transform:translateY(-2px); }
+        .done-btn{ background: rgba(76,175,80,0.12); color:#2a7f39; }
+        .del-btn{ background: rgba(235,87,87,0.10); color:#b33a3a; }
+
+        .empty{
+            text-align:center;
+            color:#7a4f4a;
+            font-size:14px;
+            padding:18px 10px;
+            opacity:0.9;
+        }
+
+        @keyframes fadeInUp{
+            from{ opacity:0; transform:translateY(8px) scale(.995); }
+            to{ opacity:1; transform:translateY(0) scale(1); }
+        }
+
+        /* small screens */
+        @media (max-width:420px){
+            .app{ padding:20px; border-radius:14px; }
+            .title h1{ font-size:18px; }
+            input[type="text"]{ font-size:14px; }
+            .icon-btn{ width:34px; height:34px; border-radius:9px; }
         }
     </style>
 </head>
 <body>
-    <button id="changeColorBtn">Schimbă Culoarea Fundalului</button>
+    <main class="app" role="application" aria-labelledby="title">
+        <div class="title">
+            <h1 id="title">🌸 Lista mea de sarcini</h1>
+            <p class="subtitle" style="margin-left:auto; font-weight:500; font-size:13px;">Pastel • Simplu • Persistență</p>
+        </div>
+
+        <form class="input-row" id="taskForm" aria-label="Adaugă sarcină">
+            <label class="input-wrap" style="gap:8px;">
+                <input id="taskInput" type="text" placeholder="Adaugă o sarcină..." aria-label="Text sarcină" autocomplete="off" />
+            </label>
+            <button type="submit" class="add-btn" title="Adaugă" aria-label="Adaugă">+</button>
+        </form>
+
+        <ul class="todo-list" id="todoList" aria-live="polite"></ul>
+    </main>
 
     <script>
-        const button = document.getElementById('changeColorBtn');
-        const colors = ['#FF5733', '#33FF57', '#3357FF', '#F333FF', '#33FFF5', '#F5FF33'];
+        (function(){
+            const STORAGE_KEY = 'todoTasks_v1';
+            const form = document.getElementById('taskForm');
+            const input = document.getElementById('taskInput');
+            const listEl = document.getElementById('todoList');
 
-        button.addEventListener('click', () => {
-            const randomColor = colors[Math.floor(Math.random() * colors.length)];
-            document.body.style.backgroundColor = randomColor;
-        });
+            let tasks = [];
+
+            function save(){
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+            }
+
+            function load(){
+                try{
+                    const raw = localStorage.getItem(STORAGE_KEY);
+                    tasks = raw ? JSON.parse(raw) : [];
+                }catch(e){
+                    tasks = [];
+                }
+            }
+
+            function createTaskElement(task){
+                const li = document.createElement('li');
+                li.className = 'task';
+                li.dataset.id = task.id;
+
+                const left = document.createElement('div');
+                left.className = 'task-left';
+
+                const text = document.createElement('div');
+                text.className = 'text';
+                text.textContent = task.text;
+                if(task.done) text.classList.add('done');
+
+                left.appendChild(text);
+
+                const controls = document.createElement('div');
+                controls.className = 'controls';
+
+                const doneBtn = document.createElement('button');
+                doneBtn.className = 'icon-btn done-btn';
+                doneBtn.title = 'Marchează ca realizat';
+                doneBtn.type = 'button';
+                doneBtn.innerText = '✔️';
+                doneBtn.addEventListener('click', () => toggleDone(task.id, text, li));
+
+                const delBtn = document.createElement('button');
+                delBtn.className = 'icon-btn del-btn';
+                delBtn.title = 'Șterge';
+                delBtn.type = 'button';
+                delBtn.innerText = '✖️';
+                delBtn.addEventListener('click', () => removeTask(task.id, li));
+
+                controls.appendChild(doneBtn);
+                controls.appendChild(delBtn);
+
+                li.appendChild(left);
+                li.appendChild(controls);
+
+                return li;
+            }
+
+            function render(){
+                listEl.innerHTML = '';
+                if(tasks.length === 0){
+                    const empty = document.createElement('div');
+                    empty.className = 'empty';
+                    empty.textContent = 'Nu există sarcini — adaugă prima ta sarcină!';
+                    listEl.appendChild(empty);
+                    return;
+                }
+                tasks.forEach(t => {
+                    listEl.appendChild(createTaskElement(t));
+                });
+            }
+
+            function addTask(text){
+                const trimmed = text.trim();
+                if(!trimmed) return;
+                const task = { id: Date.now().toString() + Math.random().toString(36).slice(2,7), text: trimmed, done:false };
+                tasks.unshift(task); // latest first
+                save();
+                const el = createTaskElement(task);
+                // insert with small animation
+                if(listEl.querySelector('.empty')) listEl.innerHTML='';
+                listEl.prepend(el);
+                input.value = '';
+                input.focus();
+            }
+
+            function toggleDone(id, textEl, liEl){
+                const idx = tasks.findIndex(t=>t.id===id);
+                if(idx===-1) return;
+                tasks[idx].done = !tasks[idx].done;
+                save();
+                if(tasks[idx].done){
+                    textEl.classList.add('done');
+                    liEl.style.opacity = '0.98';
+                }else{
+                    textEl.classList.remove('done');
+                }
+            }
+
+            function removeTask(id, liEl){
+                tasks = tasks.filter(t=>t.id!==id);
+                save();
+                // small fade out
+                liEl.style.transition = 'opacity .18s ease, transform .18s ease, height .18s ease';
+                liEl.style.opacity = '0';
+                liEl.style.transform = 'translateX(8px) scale(.995)';
+                setTimeout(()=> {
+                    if(liEl && liEl.parentNode) liEl.parentNode.removeChild(liEl);
+                    if(tasks.length===0) render();
+                }, 180);
+            }
+
+            // events
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                addTask(input.value);
+            });
+
+            // quick add by pressing Enter when focus is in input
+            input.addEventListener('keydown', (e)=>{
+                if(e.key === 'Enter' && !e.shiftKey){
+                    e.preventDefault();
+                    addTask(input.value);
+                }
+            });
+
+            // initialize
+            load();
+            render();
+
+            // expose for debugging (optional)
+            window.__todo = { save, load, get tasks(){ return tasks; } };
+        })();
     </script>
 </body>
-</html>
-
+</html></label>
