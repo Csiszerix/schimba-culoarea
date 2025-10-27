@@ -1,0 +1,33 @@
+<!-- O pagină web care schimbă culoarea de fundal când apeși un buton -->
+<!DOCTYPE html>
+<html lang="ro">    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schimbare Culoare Fundal</title>
+    <style>
+        body {
+            transition: background-color 0.5s;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <button id="changeColorBtn">Schimbă Culoarea Fundalului</button>
+
+    <script>
+        const button = document.getElementById('changeColorBtn');
+        const colors = ['#FF5733', '#33FF57', '#3357FF', '#F333FF', '#33FFF5', '#F5FF33'];
+
+        button.addEventListener('click', () => {
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            document.body.style.backgroundColor = randomColor;
+        });
+    </script>
+</body>
+</html>
+
